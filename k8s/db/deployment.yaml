@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db
+  template:
+    metadata:
+      labels:
+        app: db
+    spec:
+      containers:
+        - name: db
+          image: postgres:16-alpine
+          env:
+            - name: POSTGRES_PASSWORD
+              value: admin123
+            - name: POSTGRES_USER
+              value: admin
+            - name: POSTGRES_DB
+              value: product
+          ports:
+            - containerPort: 5432
