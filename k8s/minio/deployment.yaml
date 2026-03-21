@@ -1,34 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: k8s-db
+  name: k8s-minio
   namespace: k8s-dev
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: k8s-db
+      app: k8s-minio
   template:
     metadata:
       labels:
-        app: k8s-db
+        app: k8s-minio
     spec:
       containers:
-        - name: k8s-db
-          image: lynakiddy/k8s-db
+        - name: k8s-minio
+          image: lynakiddy/k8s-minio
           env:
-            - name: POSTGRES_USER
+            - name: MINIO_ROOT_USER
               valueFrom:
                 secretKeyRef:
                   name: k8s-secret
-                  key: db-username
-            - name: POSTGRES_PASSWORD
+                  key: minio-name
+            - name: MINIO_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: k8s-secret
-                  key: db-password
-            - name: POSTGRES_DB
-              value: product
+                  key: minio-secret
           resources:
             requests:
               cpu: 250m
@@ -37,11 +35,12 @@ spec:
               cpu: 500m
               memory: 512Mi
           ports:
-            - containerPort: 5432
+            - containerPort: 9000
+            - containerPort: 9001
           volumeMounts:
-            - name: db-storage
-              mountPath: /var/lib/postgresql/data
+            - name: minio-storage
+              mountPath: /data
       volumes:
-        - name: db-storage
+        - name: minio-storage
           persistentVolumeClaim:
-            claimName: db-pvc
+            claimName: minio-pvc

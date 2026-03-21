@@ -1,10 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: db
+  name: k8s-db
+  namespace: k8s-dev
 spec:
   selector:
-    app: db
+    app: k8s-db
   ports:
     - port: 5432
       targetPort: 5432
+  type: ClusterIP

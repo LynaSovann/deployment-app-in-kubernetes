@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-api
+  namespace: k8s-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-api
+  template:
+    metadata:
+      labels:
+        app: k8s-api
+    spec:
+      containers:
+        - name: k8s-api
+          image: lynakiddy/k8s-api
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://k8s-db:5432/accounts
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: k8s-secret
+                  key: db-username
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: k8s-secret
+                  key: db-password
+            - name: MINIO_URL
+              value: http://kubernetes.lynasovann.site/minio
+            - name: MINIO_ACCESS_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: k8s-secret
+                  key: minio-name
+            - name: MINIO_ACCESS_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: k8s-secret
+                  key: minio-secret
+            - name: MINIO_BUCKET_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: k8s-secret
+                  key: minio-bucket
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          ports:
+            - containerPort: 8080
