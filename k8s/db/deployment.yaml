@@ -29,6 +29,8 @@ spec:
                   key: db-password
             - name: POSTGRES_DB
               value: accounts
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
           resources:
             requests:
               cpu: 250m
@@ -45,10 +47,3 @@ spec:
         - name: db-storage
           persistentVolumeClaim:
             claimName: db-pvc
-      initContainers:
-        - name: busybox
-          image: busybox:latest
-          command: ["sh", "-c", "rm -rf /var/lib/postgresql/data/lost+found"]
-          volumeMounts:
-            - name: db-storage
-              mountPath: /var/lib/postgresql/data

@@ -30,7 +30,7 @@ spec:
                   name: k8s-secret
                   key: db-password
             - name: MINIO_URL
-              value: http://kubernetes.lynasovann.site/minio
+              value: http://k8s-minio:9000
             - name: MINIO_ACCESS_NAME
               valueFrom:
                 secretKeyRef:

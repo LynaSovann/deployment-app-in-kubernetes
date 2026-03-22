@@ -1,10 +1,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: k8s-ingress
+  name: k8s-ingress-web
   namespace: k8s-dev
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: nginx
   rules:
@@ -18,6 +16,18 @@ spec:
                 name: k8s-web
                 port:
                   number: 3000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: k8s-ingress-api
+  namespace: k8s-dev
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: kubernetes.lynasovann.site
+      http:
+        paths:
           - path: /api
             pathType: Prefix
             backend:
@@ -25,6 +35,18 @@ spec:
                 name: k8s-api
                 port:
                   number: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: k8s-ingress-minio
+  namespace: k8s-dev
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: kubernetes.lynasovann.site
+      http:
+        paths:
           - path: /minio
             pathType: Prefix
             backend:

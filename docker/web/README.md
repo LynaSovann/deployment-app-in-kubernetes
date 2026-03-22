@@ -5,7 +5,7 @@
 From the `/docker/web` directory
 
 ```bash
-docker build -t web .
+docker build --build-arg NEXT_PUBLIC_API_URL=http://kubernetes.lynasovann.site/api -t lynakiddy/k8s-web .
 ```
 
 ## Run the container
@@ -15,12 +15,6 @@ docker run --rm -d --name web -p 3000:3000 web
 ```
 
 ## Push to Docker Hub
-
-- Tag and push the image:
-
-```bash
-docker tag web lynakiddy/k8s-web
-```
 
 ```bash
 docker push lynakiddy/k8s-web
