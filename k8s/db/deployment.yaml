@@ -17,6 +17,8 @@ spec:
         - name: k8s-db
           image: lynakiddy/k8s-db
           env:
+            - name: POSTGRES_HOST_AUTH_METHOD
+              value: trust
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:

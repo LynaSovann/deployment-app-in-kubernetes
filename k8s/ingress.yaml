@@ -22,14 +22,17 @@ kind: Ingress
 metadata:
   name: k8s-ingress-api
   namespace: k8s-dev
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   ingressClassName: nginx
   rules:
     - host: kubernetes.lynasovann.site
       http:
         paths:
-          - path: /api
-            pathType: Prefix
+          - path: /api(/|$)(.*)
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: k8s-api
@@ -41,14 +44,17 @@ kind: Ingress
 metadata:
   name: k8s-ingress-minio
   namespace: k8s-dev
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   ingressClassName: nginx
   rules:
     - host: kubernetes.lynasovann.site
       http:
         paths:
-          - path: /minio
-            pathType: Prefix
+          - path: /minio(/|$)(.*)
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: k8s-minio
